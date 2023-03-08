@@ -30,7 +30,7 @@ export const Patients = () => {
     <div>
       <Link to='create'>Crear</Link>
 
-      <table class="table-auto w-full">
+      <table className="table-auto w-full">
         <thead>
           {
             patientColumns.map((column, index) => {
