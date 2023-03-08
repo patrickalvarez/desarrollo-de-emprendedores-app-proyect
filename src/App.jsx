@@ -18,6 +18,9 @@ function App() {
               <Route index element={<Patients />} />
               <Route path='create' element={<CreatePatient />} />
             </Route>
+            <Route path='entries' element={<Outlet />}>
+
+            </Route>
           </Route>
 
         </Routes>
