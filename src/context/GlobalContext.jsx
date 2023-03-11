@@ -35,3 +35,13 @@ export const useGlobalContext = () => {
   const value = useContext(GlobalContext)
   return value
 }
+
+export const documentTypesObject = {
+  C: 'Cédula',
+  P: 'Pasaporte'
+}
+
+export const documentTypesArray = Object.keys(documentTypesObject).map(key => ({
+  value: key,
+  label: documentTypesObject[key]
+}))

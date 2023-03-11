@@ -1,7 +1,9 @@
 import { Box, Button, Modal } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
+import dayjs from 'dayjs';
 import React from 'react'
 import { useGlobalContext } from '../../context/GlobalContext'
+import { CreatePatient } from './CreatePatient';
 
 const style = {
   position: 'absolute',
@@ -19,7 +21,6 @@ const style = {
 };
 
 
-
 export const Patients = () => {
   const [open, setOpen] = React.useState(false);
   const { patients } = useGlobalContext()
@@ -28,8 +29,8 @@ export const Patients = () => {
     { field: 'id', headerName: 'ID', width: 70 },
     { field: 'firstname', headerName: 'Nombres', width: 100 },
     { field: 'lastname', headerName: 'Apellidos', width: 120 },
-    { field: 'fullname', headerName: 'Nombre completo', width: 200, valueGetter: (params) => `${params.row['firstname'] || ''} ${params.row['lastname'] || ''}` },
-    { field: 'birthdate', headerName: 'Birthdate', width: 100 },
+    { field: 'fullname', headerName: 'Nombre Completo', width: 200, valueGetter: (params) => `${params.row['firstname'] || ''} ${params.row['lastname'] || ''}` },
+    { field: 'birthdate', headerName: 'Edad', width: 100, valueGetter: (params) => `${getDifferenceinYears(params.row['birthdate']) || '0'} Años` },
     { field: 'gender', headerName: "Sexo", width: 100 },
     { field: 'telephone', headerName: 'Teléfono', width: 120 },
   ]
@@ -46,7 +47,7 @@ export const Patients = () => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style} >
-          fORM aQUI
+          <CreatePatient />
         </Box>
       </Modal>
       <Box sx={{
@@ -74,4 +75,11 @@ export const Patients = () => {
       </div>
     </Box>
   )
+}
+
+
+const getDifferenceinYears = (date) => {
+  const today = new Date();
+  const yearsOld = dayjs(today).diff(date, 'years');
+  return yearsOld;
 }

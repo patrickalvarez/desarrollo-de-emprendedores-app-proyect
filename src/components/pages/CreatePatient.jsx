@@ -1,15 +1,19 @@
-import React from 'react'
-import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup'
-import { useNavigate } from 'react-router-dom';
-import { useGlobalContext } from '../../context/GlobalContext';
+import React, { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import * as yup from 'yup';
+import { documentTypesArray, useGlobalContext } from '../../context/GlobalContext';
+import { AppSelectField } from '../shared/AppSelectField';
+import { AppTextField } from '../shared/AppTextField';
+
 
 const requiredMessage = "Campo Requerido"
+
 const schema = yup.object().shape({
-  firstname: yup.string().required(requiredMessage),
-  lastname: yup.string().required(requiredMessage),
+  firstName: yup.string().required(requiredMessage),
+  lastName: yup.string().required(requiredMessage),
   birthdate: yup.string().required(requiredMessage),
+  documentType: yup.string().required(requiredMessage),
   documentNumber: yup.string().required(requiredMessage),
   insuranceNumber: yup.string().required(requiredMessage),
   insuranceCompany: yup.string().required(requiredMessage),
@@ -25,44 +29,36 @@ export const CreatePatient = () => {
   const {
     savePatient
   } = useGlobalContext()
-  const { handleSubmit, register, formState: { errors } } = useForm({
-    resolver: yupResolver(schema)
+
+  const { handleSubmit, register, watch, setValue, formState: { errors } } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      documentType: 'C'
+    }
   })
-  const navigate = useNavigate()
+
   const onSubmit = (data) => {
     savePatient(data)
-    navigate('/patients')
   }
+
+  const documentType = watch('documentType')
+
+  useEffect(() => {
+    setValue('documentNumber', '')
+  }, [documentType])
+
+
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit, console.error)}>
         <div className='grid grid-cols-12 gap-3'>
-          <Input label="Nombre" name="firstname" register={register} error={errors.firstname} className="col-span-12 sm:col-span-4 lg:col-span-3 xl:col-span-2" />
-          <Input label="Apellido" name="lastname" register={register} error={errors.lastname} className="col-span-12 sm:col-span-4 lg:col-span-3 xl:col-span-2"/>
-          <Input label="Fecha de Nacimiento" name="birthdate" register={register} error={errors.birthdate}className="col-span-12 sm:col-span-4 lg:col-span-3 xl:col-span-2" />
-          <Input label="DNI" name="documentNumber" register={register} error={errors.documentNumber} className="col-span-12 sm:col-span-4 lg:col-span-3 xl:col-span-2"/>
-          <Input label="Obra Social" name="insuranceCompany" register={register} error={errors.insuranceCompany} className="col-span-12 sm:col-span-4 lg:col-span-3 xl:col-span-2"/>
-          <Input label="Nro. de Afiliado" name="insuranceNumber" register={register} error={errors.insuranceNumber} className="col-span-12 sm:col-span-4 lg:col-span-3 xl:col-span-2"/>
-          <Input label="Dirección" name="address" register={register} error={errors.address} className="col-span-12 sm:col-span-4 lg:col-span-3 xl:col-span-2"/>
-          <Input label="Genero" name="gender" register={register} error={errors.address} className="col-span-12 sm:col-span-4 lg:col-span-3 xl:col-span-2"/>
-          <Input label="Tipo de Sangre" name="bloodType" register={register} error={errors.bloodType} className="col-span-12 sm:col-span-4 lg:col-span-3 xl:col-span-2"/>  
-          <Input label="Teléfono" name="telephone" register={register} error={errors.telephone} className="col-span-12 sm:col-span-4 lg:col-span-3 xl:col-span-2"/>
-          <Input label="Celular" name="mobile" register={register} error={errors.mobile}className="col-span-12 sm:col-span-4 lg:col-span-3 xl:col-span-2" />
-          <Input label="Email" name="email" register={register} error={errors.email} className="col-span-12 sm:col-span-4 lg:col-span-3 xl:col-span-2"/>
+          <AppTextField label="Nombre" register={register} name='firstName' className="col-span-12 sm:col-span-6" error={errors} />
+          <AppTextField label="Apellido" register={register} name='lastName' className="col-span-12 sm:col-span-6" error={errors} />
+          <AppSelectField label="Tipo de Documento" register={register} name='documentType' className="col-span-12 sm:col-span-6" error={errors} options={documentTypesArray} />
+          <AppTextField label="Numero de Documento" register={register} name='documentNumber' className="col-span-12 sm:col-span-6" error={errors} />
         </div>
         <button>Guardar</button>
       </form>
-    </div>
-  )
-}
-
-
-const Input = ({ label, name, register, error, className }) => {
-  return (
-    <div className={`flex flex-col ${className} `}>
-      <label className='text-gray-800' htmlFor={name}>{label}</label>
-      <input className={`p-2 outline-none border border-gray-300 rounded-md ${error && "border-red-500 border-2"}`} type="text" name={name} {...register(name)} />
-      {error && <span className='text-red-500 text-sm font-medium'>{error.message}</span>}
     </div>
   )
 }
