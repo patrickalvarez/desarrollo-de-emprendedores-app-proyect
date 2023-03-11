@@ -1,5 +1,6 @@
+import { Box, Button } from '@mui/material'
+import { DataGrid } from '@mui/x-data-grid'
 import React from 'react'
-import { Link } from 'react-router-dom'
 import { useGlobalContext } from '../../context/GlobalContext'
 
 export const Patients = () => {
@@ -26,34 +27,36 @@ export const Patients = () => {
       accessor: 'telephone'
     },
   ]
-  return (
-    <div>
-      <Link to='create'>Crear</Link>
 
-      <table className="table-auto w-full">
-        <thead>
-          {
-            patientColumns.map((column, index) => {
-              return <th className='text-left' key={index}>{column.header}</th>
-            })
-          }
-        </thead>
-        <tbody>
-          {
-            patients.map((patient, index) => {
-              return (
-                <tr key={index}>
-                  {
-                    patientColumns.map((column, index) => {
-                      return <td key={index}>{patient[column.accessor]}</td>
-                    })
-                  }
-                </tr>
-              )
-            })
-          }
-        </tbody>
-      </table>
-    </div>
+  const columns = [
+    { field: 'id', headerName: 'ID', width: 70 },
+    { field: 'firstname', headerName: 'First name', width: 100 },
+    { field: 'lastname', headerName: 'Last name', width: 120 },
+    { field: 'birthdate', headerName: 'Birthdate', width: 100 },
+    { field: 'gender', headerName: "Sexo", width: 100 },
+    { field: 'telephone', headerName: 'Teléfono', width: 120 },
+  ]
+
+  return (
+    <Box>
+      <Box sx={{
+        display: 'flex',
+        justifyContent: 'flex-end',
+        mb: '12px',
+      }}>
+        <Button variant='contained' color='primary' sx={{
+          marginLeft: '10px',
+        }}>Crear</Button>
+      </Box>
+      <div style={{ height: 400, width: '100%' }}>
+        <DataGrid
+          rows={patients}
+          columns={columns}
+          pageSize={5}
+          rowsPerPageOptions={[5]}
+          checkboxSelection
+        />
+      </div>
+    </Box>
   )
 }

@@ -1,4 +1,4 @@
-import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Navigate, Outlet, Route, Routes } from 'react-router-dom'
 import './App.css'
 import { CreatePatient } from './components/pages/CreatePatient'
 import { Dashboard } from './components/pages/Dashboard'
@@ -13,7 +13,8 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<Layout />}>
-            <Route index element={<Dashboard />} />
+            <Route index element={<Navigate to="dashboard" replace />} />
+            <Route path="dashboard" element={<Dashboard />} />
             <Route path='patients' element={<Outlet />}>
               <Route index element={<Patients />} />
               <Route path='create' element={<CreatePatient />} />
