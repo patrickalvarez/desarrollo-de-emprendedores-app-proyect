@@ -4,7 +4,7 @@ import React from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 import { blue } from '@mui/material/colors';
 
-export const CustomLink = ({ Icon, to }) => {
+export const CustomLink = ({ Icon, to, label }) => {
   const location = useLocation()
   const active = location.pathname.includes(to)
 
@@ -16,7 +16,7 @@ export const CustomLink = ({ Icon, to }) => {
             <Icon sx={active ? { color: "white" } : {}} />
           </ListItemIcon>
           <ListItemText>
-            Pacientes
+            {label}
           </ListItemText>
         </ListItemButton>
       </ListItem>

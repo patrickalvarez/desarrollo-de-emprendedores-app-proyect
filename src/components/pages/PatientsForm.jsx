@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Button, TextField, Typography } from '@mui/material';
+import { Button, TextField } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { bloodTypesArray, documentTypesArray, gendersArray, insuranceCompaniesArray, useGlobalContext } from '../../context/GlobalContext';
@@ -27,7 +27,7 @@ const schema = yup.object().shape({
   email: yup.string().email("Email no valido").required(requiredMessage),
 })
 
-export const CreatePatient = ({ handleClose }) => {
+export const PatientsForm = ({ handleClose }) => {
   const {
     savePatient
   } = useGlobalContext()

@@ -6,8 +6,10 @@ const GlobalContext = createContext({})
 
 const getInitialState = () => {
   const patients = localStorage.getItem('patients')
+  const entries = localStorage.getItem('entries')
   return {
-    patients: patients ? JSON.parse(patients) : []
+    patients: patients ? JSON.parse(patients) : [],
+    entries: entries ? JSON.parse(entries) : []
   }
 }
 
@@ -25,6 +27,7 @@ export const GlobalContextProvider = ({ children }) => {
 
   const value = {
     patients: state.patients,
+    entries: state.entries,
     savePatient
   }
 
@@ -66,6 +69,23 @@ export const bloodTypesObject = {
   '8': 'AB-',
 }
 
+export const wayOfArrivalObject = {
+  '1': 'Medios Propios',
+  '2': 'Ambulancia',
+  '3': '911',
+}
+
+export const consultMotivesObject = {
+  '1': 'Cefales',
+  '2': 'Dolor de Cabeza',
+  '3': 'Mareos',
+  '4': 'Nauseas',
+  '5': 'Vomitos',
+  '6': 'Dolor de Garganta',
+  '7': 'Dolor de Pecho',
+  '8': 'Dolor de Abdominal',
+}
+
 const getObjectAsArray = (object) => {
   return Object.keys(object).map(key => ({
     value: key,
@@ -77,3 +97,5 @@ export const documentTypesArray = getObjectAsArray(documentTypesObject)
 export const insuranceCompaniesArray = getObjectAsArray(insuranceCompaniesObject)
 export const gendersArray = getObjectAsArray(gendersObject)
 export const bloodTypesArray = getObjectAsArray(bloodTypesObject)
+export const wayOfArrivalArray = getObjectAsArray(wayOfArrivalObject)
+export const consultMotivesArray = getObjectAsArray(consultMotivesObject)

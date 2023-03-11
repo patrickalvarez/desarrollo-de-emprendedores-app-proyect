@@ -1,4 +1,4 @@
-import { Menu as MenuIcon, Person as PersonIcon, Dashboard as DashboardIcon } from "@mui/icons-material";
+import { Menu as MenuIcon, Person as PersonIcon, Dashboard as DashboardIcon, HealthAndSafety as HealthAndSafetyIcon } from "@mui/icons-material";
 import { AppBar, Box, CssBaseline, Drawer, IconButton, List, Toolbar, Typography } from "@mui/material";
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
@@ -18,8 +18,9 @@ export const Layout = (props) => {
     <div>
       <Toolbar />
       <List>
-        <CustomLink Icon={DashboardIcon} to='/dashboard' />
-        <CustomLink Icon={PersonIcon} to='/patients' />
+        <CustomLink Icon={DashboardIcon} to='/dashboard' label="Dashboard" />
+        <CustomLink Icon={PersonIcon} to='/patients' label="Pacientes" />
+        <CustomLink Icon={HealthAndSafetyIcon} to='/entries' label="Entrada" />
       </List>
     </div>
   );

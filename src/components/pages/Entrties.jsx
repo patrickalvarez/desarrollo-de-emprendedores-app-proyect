@@ -1,8 +1,8 @@
 import { Box, Button, Modal, Typography } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
-import dayjs from 'dayjs';
 import React from 'react'
 import { gendersObject, useGlobalContext } from '../../context/GlobalContext'
+import { EntriesForm } from './EntriesForm';
 import { PatientsForm } from './PatientsForm';
 
 const style = {
@@ -20,19 +20,15 @@ const style = {
   p: 4,
 };
 
-
-export const Patients = () => {
+export const Entrties = () => {
   const [open, setOpen] = React.useState(false);
-  const { patients } = useGlobalContext()
-  const [selectedRow, setSelectedRow] = React.useState(null);
+  const { entries } = useGlobalContext()
 
   const columns = [
     { field: 'id', headerName: 'ID', width: 70 },
     { field: 'firstName', headerName: 'Nombres', width: 100 },
     { field: 'lastName', headerName: 'Apellidos', width: 120 },
     { field: 'fullname', headerName: 'Nombre Completo', width: 200, valueGetter: (params) => `${params.row['firstName'] || ''} ${params.row['lastName'] || ''}` },
-    { field: 'birthdate', headerName: 'Edad', width: 100, valueGetter: (params) => `${getDifferenceinYears(params.row['birthdate']) || '0'} Años` },
-    { field: 'documentNumber', headerName: 'Numero de Documento', width: 160 },
     { field: 'gender', headerName: "Sexo", width: 100, valueGetter: (params) => gendersObject[params.row.gender] },
     { field: 'telephone', headerName: 'Teléfono', width: 120 },
   ]
@@ -49,8 +45,8 @@ export const Patients = () => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style} >
-          <Typography variant='h5' sx={{ mb: '12px' }}>Crear Paciente</Typography>
-          <PatientsForm handleClose={handleClose} />
+          <Typography variant='h5' sx={{ mb: '12px' }}>Entrada a Paciente</Typography>
+          <EntriesForm handleClose={handleClose} />
         </Box>
       </Modal>
       <Box sx={{
@@ -70,20 +66,12 @@ export const Patients = () => {
       </Box>
       <div style={{ height: 400, width: '100%' }}>
         <DataGrid
-          rows={patients}
+          rows={entries}
           columns={columns}
           pageSize={5}
           rowsPerPageOptions={[5]}
-          onRowClick={(params) => setSelectedRow(params.row)}
         />
       </div>
     </Box>
   )
-}
-
-
-const getDifferenceinYears = (date) => {
-  const today = new Date();
-  const yearsOld = dayjs(today).diff(date, 'years');
-  return yearsOld;
 }
