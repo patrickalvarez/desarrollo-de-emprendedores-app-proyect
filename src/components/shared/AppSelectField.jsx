@@ -9,7 +9,6 @@ export const AppSelectField = ({ label, name, register, error, className, option
         select
         label={label}
         variant="outlined"
-        error={!!error?.[name]}
         {...register(name)}
         helperText={helperText}
         defaultValue={options[0].value}

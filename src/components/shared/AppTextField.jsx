@@ -8,7 +8,6 @@ export const AppTextField = ({ label, name, register, error, className }) => {
         id={name}
         label={label}
         variant="outlined"
-        error={!!error?.[name]}
         {...register(name)}
       />
       {

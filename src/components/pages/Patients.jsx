@@ -1,8 +1,8 @@
-import { Box, Button, Modal } from '@mui/material'
+import { Box, Button, Modal, Typography } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
 import dayjs from 'dayjs';
 import React from 'react'
-import { useGlobalContext } from '../../context/GlobalContext'
+import { gendersObject, useGlobalContext } from '../../context/GlobalContext'
 import { CreatePatient } from './CreatePatient';
 
 const style = {
@@ -27,11 +27,11 @@ export const Patients = () => {
 
   const columns = [
     { field: 'id', headerName: 'ID', width: 70 },
-    { field: 'firstname', headerName: 'Nombres', width: 100 },
-    { field: 'lastname', headerName: 'Apellidos', width: 120 },
-    { field: 'fullname', headerName: 'Nombre Completo', width: 200, valueGetter: (params) => `${params.row['firstname'] || ''} ${params.row['lastname'] || ''}` },
+    { field: 'firstName', headerName: 'Nombres', width: 100 },
+    { field: 'lastName', headerName: 'Apellidos', width: 120 },
+    { field: 'fullname', headerName: 'Nombre Completo', width: 200, valueGetter: (params) => `${params.row['firstName'] || ''} ${params.row['lastName'] || ''}` },
     { field: 'birthdate', headerName: 'Edad', width: 100, valueGetter: (params) => `${getDifferenceinYears(params.row['birthdate']) || '0'} Años` },
-    { field: 'gender', headerName: "Sexo", width: 100 },
+    { field: 'gender', headerName: "Sexo", width: 100, valueGetter: (params) => gendersObject[params.row.gender] },
     { field: 'telephone', headerName: 'Teléfono', width: 120 },
   ]
 
@@ -47,7 +47,8 @@ export const Patients = () => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style} >
-          <CreatePatient />
+          <Typography variant='h5' sx={{ mb: '12px' }}>Crear Paciente</Typography>
+          <CreatePatient handleClose={handleClose} />
         </Box>
       </Modal>
       <Box sx={{
