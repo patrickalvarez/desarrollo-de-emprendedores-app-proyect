@@ -53,7 +53,6 @@ export const PatientsForm = ({ handleClose }) => {
     setValue('documentNumber', '')
   }, [documentType])
 
-
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit, console.error)} className='flex flex-col gap-3'>

@@ -1,8 +1,10 @@
 import { Box, Button, Modal, Typography } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
 import dayjs from 'dayjs';
-import React from 'react'
+import React, { useState } from 'react'
 import { gendersObject, useGlobalContext } from '../../context/GlobalContext'
+import { getDifferenceinYears } from '../../helpers/date';
+import { EntriesForm } from './EntriesForm';
 import { PatientsForm } from './PatientsForm';
 
 const style = {
@@ -22,9 +24,10 @@ const style = {
 
 
 export const Patients = () => {
-  const [open, setOpen] = React.useState(false);
+  const [createPatientModal, setCreatePatientModal] = useState(false);
+  const [entryPatientModal, setEntryPatientModal] = useState(false);
   const { patients } = useGlobalContext()
-  const [selectedRow, setSelectedRow] = React.useState(null);
+  const [selectedRow, setSelectedRow] = useState(null);
 
   const columns = [
     { field: 'id', headerName: 'ID', width: 70 },
@@ -37,33 +40,53 @@ export const Patients = () => {
     { field: 'telephone', headerName: 'Teléfono', width: 120 },
   ]
 
-  const handleClose = () => setOpen(false);
-  const handleOpen = () => setOpen(true);
+  const handleCloseCreatePatientModal = () => setCreatePatientModal(false);
+  const handleOpenCreatePatientModal = () => setCreatePatientModal(true);
+  const handleCloseEntryPatientModal = () => setEntryPatientModal(false);
+  const handleOpenEntryPatientModal = () => setEntryPatientModal(true);
 
   return (
     <Box>
       <Modal
-        open={open}
-        onClose={handleClose}
+        open={createPatientModal}
+        onClose={handleCloseCreatePatientModal}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
         <Box sx={style} >
           <Typography variant='h5' sx={{ mb: '12px' }}>Crear Paciente</Typography>
-          <PatientsForm handleClose={handleClose} />
+          <PatientsForm handleClose={handleCloseCreatePatientModal} />
+        </Box>
+      </Modal>
+      <Modal
+        open={entryPatientModal}
+        onClose={handleCloseEntryPatientModal}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style} >
+          <Typography variant='h5' sx={{ mb: '12px' }}>Crear Paciente</Typography>
+          <EntriesForm handleClose={handleCloseEntryPatientModal} patient={selectedRow} />
         </Box>
       </Modal>
       <Box sx={{
         display: 'flex',
         justifyContent: 'flex-end',
+        gap: '12px',
         mb: '12px',
       }}>
         <Button
           variant='contained'
-          color='primary' sx={{
-            marginLeft: '10px',
-          }}
-          onClick={handleOpen}
+          color='primary'
+          disabled={!selectedRow}
+          onClick={handleOpenEntryPatientModal}
+        >
+          Dar entrada
+        </Button>
+        <Button
+          variant='contained'
+          color='primary'
+          onClick={handleOpenCreatePatientModal}
         >
           Crear
         </Button>
@@ -79,11 +102,4 @@ export const Patients = () => {
       </div>
     </Box>
   )
-}
-
-
-const getDifferenceinYears = (date) => {
-  const today = new Date();
-  const yearsOld = dayjs(today).diff(date, 'years');
-  return yearsOld;
 }

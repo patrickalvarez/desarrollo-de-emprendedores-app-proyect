@@ -4,12 +4,29 @@ import { v4 as uuidv4 } from 'uuid';
 
 const GlobalContext = createContext({})
 
+const patientsObject = {}
+
+const entriesObject = {}
+
 const getInitialState = () => {
-  const patients = localStorage.getItem('patients')
-  const entries = localStorage.getItem('entries')
+  const patientsJson = localStorage.getItem('patients')
+  const entriesJson = localStorage.getItem('entries')
+
+  const patients = patientsJson ? JSON.parse(patientsJson) : []
+  const entries = entriesJson ? JSON.parse(entriesJson) : []
+
+  patients.forEach(patient => {
+    patientsObject[patient.id] = patient
+  })
+
+  entries.forEach(entry => {
+    entriesObject[entry.id] = entry
+    entry.patient = patientsObject[entry.patientId]
+  })
+
   return {
-    patients: patients ? JSON.parse(patients) : [],
-    entries: entries ? JSON.parse(entries) : []
+    patients,
+    entries
   }
 }
 
@@ -17,18 +34,36 @@ export const GlobalContextProvider = ({ children }) => {
   const [state, setState] = useState(getInitialState())
 
   const savePatient = (patient) => {
-    const newPatients = [...state.patients, { ...patient, birthdate: dayjs(patient.birthdate).format('YYYY-MM-DD'), id: uuidv4() }]
+    const newPatient = { ...patient, birthdate: dayjs(patient.birthdate).format('YYYY-MM-DD'), id: uuidv4() }
+    const newPatients = [...state.patients, newPatient]
+    patientsObject[newPatient.id] = newPatient
+
     setState({
       ...state,
       patients: newPatients
     })
+
     localStorage.setItem('patients', JSON.stringify(newPatients))
+  }
+
+  const saveEntrie = (entry, patientId) => {
+    const newEntry = { ...entry, patientId, date: dayjs(), id: uuidv4() }
+    const newEntries = [...state.entries, newEntry]
+    entriesObject[newEntry.id] = newEntry
+
+    setState({
+      ...state,
+      entries: { ...newEntries, patient: patientsObject[patientId] }
+    })
+
+    localStorage.setItem('entries', JSON.stringify(newEntries))
   }
 
   const value = {
     patients: state.patients,
     entries: state.entries,
-    savePatient
+    savePatient,
+    saveEntrie
   }
 
   return <GlobalContext.Provider value={value}>
@@ -86,6 +121,15 @@ export const consultMotivesObject = {
   '8': 'Dolor de Abdominal',
 }
 
+export const relationshipObject = {
+  '1': 'Hijo(a)',
+  '2': 'Padre',
+  '3': 'Madre',
+  '4': 'Esposo(a)',
+  '5': 'Hermano(a)',
+  '9': 'Amigo(a)',
+}
+
 const getObjectAsArray = (object) => {
   return Object.keys(object).map(key => ({
     value: key,
@@ -99,3 +143,4 @@ export const gendersArray = getObjectAsArray(gendersObject)
 export const bloodTypesArray = getObjectAsArray(bloodTypesObject)
 export const wayOfArrivalArray = getObjectAsArray(wayOfArrivalObject)
 export const consultMotivesArray = getObjectAsArray(consultMotivesObject)
+export const relationshipArray = getObjectAsArray(relationshipObject)

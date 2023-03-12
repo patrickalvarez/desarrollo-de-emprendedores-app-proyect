@@ -1,9 +1,8 @@
-import { Box, Button, Modal, Typography } from '@mui/material'
-import { DataGrid } from '@mui/x-data-grid'
-import React from 'react'
-import { gendersObject, useGlobalContext } from '../../context/GlobalContext'
-import { EntriesForm } from './EntriesForm';
-import { PatientsForm } from './PatientsForm';
+import { Box } from '@mui/material';
+import { DataGrid } from '@mui/x-data-grid';
+import React from 'react';
+import { consultMotivesObject, useGlobalContext, wayOfArrivalObject } from '../../context/GlobalContext';
+import { getDifferenceinYears } from '../../helpers/date';
 
 const style = {
   position: 'absolute',
@@ -25,20 +24,25 @@ export const Entrties = () => {
   const { entries } = useGlobalContext()
 
   const columns = [
-    { field: 'id', headerName: 'ID', width: 70 },
-    { field: 'firstName', headerName: 'Nombres', width: 100 },
-    { field: 'lastName', headerName: 'Apellidos', width: 120 },
-    { field: 'fullname', headerName: 'Nombre Completo', width: 200, valueGetter: (params) => `${params.row['firstName'] || ''} ${params.row['lastName'] || ''}` },
-    { field: 'gender', headerName: "Sexo", width: 100, valueGetter: (params) => gendersObject[params.row.gender] },
-    { field: 'telephone', headerName: 'Teléfono', width: 120 },
+    { field: 'wayOfArraival', headerName: 'Via de LLegada', width: 140, valueGetter: (params) => wayOfArrivalObject[params.row.wayOfArraival] },
+    { field: 'consultMotive', headerName: 'Motivo de Consulta', width: 140, valueGetter: (params) => consultMotivesObject[params.row.consultMotive] },
+    { field: 'patientName', headerName: 'Paciente', width: 200, valueGetter: (params) => `${params.row.patient['firstName'] || ''} ${params.row.patient['lastName'] || ''}` },
+    {
+      field: 'patientDocument', headerName: 'Documento', width: 200, valueGetter: (params) => `${params.row.patient.documentNumber || ''}`
+    },
+    {
+      field: 'patientYearsOld', headerName: 'Edad', width: 200, valueGetter: (params) => `${getDifferenceinYears(params.row['birthdate']) || '0'} Años`
+    }
   ]
+
+  console.log(entries)
 
   const handleClose = () => setOpen(false);
   const handleOpen = () => setOpen(true);
 
   return (
     <Box>
-      <Modal
+      {/* <Modal
         open={open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
@@ -48,8 +52,8 @@ export const Entrties = () => {
           <Typography variant='h5' sx={{ mb: '12px' }}>Entrada a Paciente</Typography>
           <EntriesForm handleClose={handleClose} />
         </Box>
-      </Modal>
-      <Box sx={{
+      </Modal> */}
+      {/* <Box sx={{
         display: 'flex',
         justifyContent: 'flex-end',
         mb: '12px',
@@ -63,7 +67,7 @@ export const Entrties = () => {
         >
           Crear
         </Button>
-      </Box>
+      </Box> */}
       <div style={{ height: 400, width: '100%' }}>
         <DataGrid
           rows={entries}
