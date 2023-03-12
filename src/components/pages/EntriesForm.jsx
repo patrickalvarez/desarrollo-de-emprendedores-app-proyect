@@ -18,8 +18,8 @@ const schema = yup.object().shape({
   contactPhone: yup.string(),
   contactAddress: yup.string(),
   contactRelationship: yup.string(),
-  medicalHistory: yup.string(),
-  actualMedicalHistory: yup.string(),
+  medicalHistory: yup.string().required(requiredMessage),
+  actualMedicalHistory: yup.string().required(requiredMessage),
 })
 
 export const EntriesForm = ({ patient, handleClose }) => {
@@ -72,10 +72,10 @@ export const EntriesForm = ({ patient, handleClose }) => {
           <AppSelectField label="Via de LLegada" register={register} name='wayOfArraival' className="col-span-12 sm:col-span-6" error={errors} options={wayOfArrivalArray} />
           <AppSelectField label="Motivo de Consulta" register={register} name='consultMotive' className="col-span-12 sm:col-span-6" error={errors} options={consultMotivesArray} />
           <AppSelectField label="Parentesco" register={register} name='contactRelationship' className="col-span-12 sm:col-span-6" error={errors} options={relationshipArray} />
-          <AppTextField label="Nombre" register={register} name='contactFirstName' className="col-span-12 sm:col-span-6" error={errors} />
-          <AppTextField label="Apellido" register={register} name='contactLastName' className="col-span-12 sm:col-span-6" error={errors} />
-          <AppTextField label="Telefono" register={register} name='contactPhone' className="col-span-12 sm:col-span-6" error={errors} />
-          <AppTextField label="Direccion" register={register} name='contactAddress' className="col-span-12" error={errors} />
+          <AppTextField label="Nombre Persona Contacto" register={register} name='contactFirstName' className="col-span-12 sm:col-span-6" error={errors} />
+          <AppTextField label="Apellido Persona Contacto" register={register} name='contactLastName' className="col-span-12 sm:col-span-6" error={errors} />
+          <AppTextField label="Telefono Persona Contacto" register={register} name='contactPhone' className="col-span-12 sm:col-span-6" error={errors} />
+          <AppTextField label="Direccion Persona Contacto" register={register} name='contactAddress' className="col-span-12" error={errors} />
           <AppTextField label="Antecedentes Medicos" register={register} name='medicalHistory' className="col-span-12" error={errors} multiline />
           <AppTextField label="Historia Enfermedad Actual" register={register} name='actualMedicalHistory' className="col-span-12" error={errors} multiline />
         </div>
