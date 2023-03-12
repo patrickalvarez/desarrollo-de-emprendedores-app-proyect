@@ -47,13 +47,13 @@ export const GlobalContextProvider = ({ children }) => {
   }
 
   const saveEntrie = (entry, patientId) => {
-    const newEntry = { ...entry, patientId, date: dayjs(), id: uuidv4() }
-    const newEntries = [...state.entries, newEntry]
+    const newEntry = { ...entry, patientId, createdAt: new Date(), id: uuidv4(), patient: patientsObject[patientId] }
+    const newEntries = [newEntry, ...state.entries]
     entriesObject[newEntry.id] = newEntry
 
     setState({
       ...state,
-      entries: { ...newEntries, patient: patientsObject[patientId] }
+      entries: newEntries
     })
 
     localStorage.setItem('entries', JSON.stringify(newEntries))

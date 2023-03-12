@@ -1,5 +1,6 @@
 import { Box } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
+import dayjs from 'dayjs';
 import React from 'react';
 import { consultMotivesObject, useGlobalContext, wayOfArrivalObject } from '../../context/GlobalContext';
 import { getDifferenceinYears } from '../../helpers/date';
@@ -31,11 +32,14 @@ export const Entrties = () => {
       field: 'patientDocument', headerName: 'Documento', width: 200, valueGetter: (params) => `${params.row.patient.documentNumber || ''}`
     },
     {
-      field: 'patientYearsOld', headerName: 'Edad', width: 200, valueGetter: (params) => `${getDifferenceinYears(params.row['birthdate']) || '0'} Años`
+      field: 'patientYearsOld', headerName: 'Edad', width: 200, valueGetter: (params) => `${getDifferenceinYears(params.row.patient['birthdate']) || '0'} Años`
+    },
+    {
+      field: 'createdAt', headerName: 'Fecha y Hora de Creación', width: 200, valueGetter: (params) => {
+        return `${dayjs(params.row.createdAt).format('DD-MM-YYYY hh:mm A') || ''}`
+      }
     }
   ]
-
-  console.log(entries)
 
   const handleClose = () => setOpen(false);
   const handleOpen = () => setOpen(true);
